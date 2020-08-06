@@ -148,6 +148,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataObject\EnvironmentSetting.cs" />
     <Compile Include="DriverWrapper\Browser\ChromeWebDriver.cs" />
     <Compile Include="DriverWrapper\Browser\FirefoxWebDriver.cs" />
     <Compile Include="DriverWrapper\Browser\InternetExplorerWebDriver.cs" />
@@ -155,6 +156,9 @@
     <Compile Include="DriverWrapper\DriverType.cs" />
     <Compile Include="DriverWrapper\WebDriver.cs" />
     <Compile Include="DriverWrapper\WebDriverFactory.cs" />
+    <Compile Include="Helper\EnviromentHelper.cs" />
+    <Compile Include="Helper\JsonHelper.cs" />
+    <Compile Include="Helper\Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
