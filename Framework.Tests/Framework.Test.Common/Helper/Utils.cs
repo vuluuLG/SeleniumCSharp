@@ -14,39 +14,6 @@ namespace Framework.Test.Common.Helper
 {
     public static class Utils
     {
-        public static string ReportFailureOfValidationPoints(string verifiedPoint, string expectedValue, string actualValue)
-        {
-            string outMessage = verifiedPoint + " - Expected Value: " + expectedValue + " , Actual Value: " + actualValue;
-            return outMessage;
-        }
-
-        public static string ReportExceptionInValidation(string verifiedPoint, Exception e)
-        {
-            string outMessage;
-            if (e != null)
-            {
-                outMessage = verifiedPoint + " Failed With Exception - " + e.Message + " " + e.StackTrace;
-            }
-            else
-            {
-                outMessage = verifiedPoint + " Failed With Exception - Unknown";
-            }
-            return outMessage;
-        }
-
-        public static string FormatErrorMessage(string errorMessage)
-        {
-            string formattedString = errorMessage;
-            if (formattedString != null && formattedString.StartsWith("Expected JSON document") && formattedString.Contains("to be equivalent to"))
-            {
-                // format actual json
-                formattedString = formattedString.Replace("Expected JSON document", "Expected the Actual response");
-                // format expected json
-                formattedString = formattedString.Replace("to be equivalent to", "to be equivalent to the Expected response");
-            }
-            return formattedString;
-        }
-
         public static string GetRandomValue(string value)
         {
             if (value != null)
@@ -59,39 +26,6 @@ namespace Framework.Test.Common.Helper
             }
 
             return value;
-        }
-
-        public static string GetProjectPath(bool includeBinFolder = false)
-        {
-            //string path_old = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
-            string path = Directory.GetCurrentDirectory() + "\\";
-            string actualPath = path;
-            if (!includeBinFolder)
-            {
-                actualPath = path.Substring(0, path.LastIndexOf("bin"));
-            }
-            string projectPath = new Uri(actualPath).LocalPath; // project path of your solution
-            return projectPath;
-        }
-
-        public static string ImageToBase64(string imagePath)
-        {
-            string base64String;
-            using (System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath))
-            {
-                using (MemoryStream m = new MemoryStream())
-                {
-                    image.Save(m, image.RawFormat);
-                    byte[] imageBytes = m.ToArray();
-                    base64String = Convert.ToBase64String(imageBytes);
-                    return base64String;
-                }
-            }
-        }
-
-        public static IMarkup MarkupJsonString(this string data)
-        {
-            return MarkupHelper.CreateCodeBlock(data, CodeLanguage.Json);
         }
 
         public static string MaskSensitiveJsonData(this string data, string[] sensitiveList, string mask = "********")
@@ -112,11 +46,6 @@ namespace Framework.Test.Common.Helper
         public static string ConvertObjectToJson(this object dataObject)
         {
             return JsonConvert.SerializeObject(dataObject);
-        }
-
-        public static string ToDateTimeString(this DateTime date, string dateFormat = "yyyy-MM-dd")
-        {
-            return date.ToString(dateFormat);
         }
 
         public static T ToEnumValue<T>(this string description)
@@ -189,67 +118,16 @@ namespace Framework.Test.Common.Helper
             return null;
         }
 
-        public static string MarkupTestCategory(string category)
-        {
-            if (string.IsNullOrEmpty(category)) return category;
-            return category.Replace(" ", "_");
-        }
-
         public static string Truncate(this string value, int maxLength)
         {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Substring(0, Math.Min(maxLength, value.Length));
         }
 
-        public static string GetCurrentDateString(string dateFormat, string timeLine = null, string timeLineFormat = null)
-        {
-            DateTime currentDate = DateTime.Now;
-
-            return GetTargetDateString(currentDate, dateFormat, timeLine, timeLineFormat);
-        }
-
-        public static string GetNextDateString(string dateFormat, string timeLine = null, string timeLineFormat = null)
-        {
-            return GetNextNDateString(dateFormat, timeLine, timeLineFormat, 1);
-        }
-
-        public static string GetNextNDateString(string dateFormat, string timeLine = null, string timeLineFormat = null, int addDays = 0)
-        {
-            DateTime nextDate = DateTime.Now.AddDays(addDays);
-
-            return GetTargetDateString(nextDate, dateFormat, timeLine, timeLineFormat);
-        }
-
-        public static string GetTargetDateString(DateTime targetDate, string dateFormat, string timeLine = null, string timeLineFormat = null)
-        {
-            DateTime currentDate = targetDate;
-
-            if (timeLine != null)
-            {
-                DateTime timeLineDate;
-
-                if (timeLineFormat != null)
-                {
-                    timeLineDate = DateTime.ParseExact(timeLine, timeLineFormat, null);
-                }
-                else
-                {
-                    timeLineDate = DateTime.ParseExact(timeLine, dateFormat, null);
-                }
-
-                if (DateTime.Compare(currentDate, timeLineDate) < 0)
-                {
-                    return timeLineDate.ToString(dateFormat);
-                }
-            }
-
-            return currentDate.ToString(dateFormat);
-        }
-
-        public static string GetNumberStringFromCurrency(string currency)
+        public static string GetNumberStringFromCurrency(string currency, string currencyFormat = "$")
         {
             if (string.IsNullOrEmpty(currency)) return currency;
-            return currency.Replace("$", "").Replace(",", "");
+            return currency.Replace(currencyFormat, "").Replace(",", "");
         }
 
         public static string ConvertDynamicData(object data)
@@ -276,7 +154,7 @@ namespace Framework.Test.Common.Helper
                         int day = int.Parse(groups[1].Value);
                         string timeline = groups[2].Value;
                         string timelineFormat = groups[3].Value;
-                        string convertedString = GetTargetDateString(DateTime.Now.AddDays(day), "yyyy-MM-dd", timeline, timelineFormat);
+                        string convertedString = DateHelper.GetTargetDateString(DateTime.Now.AddDays(day), "yyyy-MM-dd", timeline, timelineFormat);
                         convertedData = convertedData.Replace(groups[0].Value, convertedString);
                     }
                     while (Regex.IsMatch(convertedData, @"@{next\d+day:timeline<.+:.+>}"));
@@ -297,71 +175,62 @@ namespace Framework.Test.Common.Helper
             return null;
         }
 
-        public static string Item(this JObject jObject, string item)
+        public static JObject[] ToJObjects(this object value)
         {
-            if (jObject != null)
+            if (value != null)
             {
-                var token = jObject.SelectToken(item);
-                if (token != null)
-                    return token.ToString();
+                return JsonHelper.Default.Deserialize<JObject[]>(value.ToString());
             }
             return null;
         }
 
-        public static T Item<T>(this JObject jObject, string item)
+        public static string Item(this JToken jObject, string itemName)
         {
             if (jObject != null)
             {
-                var token = jObject.SelectToken(item);
-                if (token != null)
-                    return token.ToObject<T>();
+                var tokens = jObject.SelectTokens($"$..{itemName}");
+                if (tokens.Any())
+                    return tokens.ToArray().First().ToString();
+            }
+            return null;
+        }
+
+        public static T Item<T>(this JToken jObject, string itemName)
+        {
+            if (jObject != null)
+            {
+                var tokens = jObject.SelectTokens($"$..{itemName}");
+                if (tokens.Any())
+                    return tokens.ToArray().First().ToObject<T>();
             }
             return default(T);
         }
 
-        public static void CopyFile(string inputFilePath, string outputFilePath)
+        public static T[] Items<T>(this JToken jObject, string itemName)
         {
-            int bufferSize = 1024 * 1024;
-            using (FileStream input = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            if (jObject != null)
             {
-                using (FileStream output = new FileStream(outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
-                {
-                    output.SetLength(input.Length);
-                    int bytesRead = -1;
-                    byte[] bytes = new byte[bufferSize];
-                    while ((bytesRead = input.Read(bytes, 0, bufferSize)) > 0)
-                    {
-                        output.Write(bytes, 0, bytesRead);
-                    }
-                }
+                var tokens = jObject.SelectTokens($"$..{itemName}");
+                if (tokens.Any())
+                    return tokens.Cast<T>().ToArray();
             }
+            return default(T[]);
         }
 
-        public static string ReadAllTextFromFile(string filePath)
+        public static bool IsNumber(string value)
         {
-            string contents = null;
-            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    contents = sr.ReadToEnd();
-                }
-            }
-            return contents;
+            return int.TryParse(value, out int number);
         }
 
-        public static void WriteAllTextToFile(string filePath, string contents)
+        public static T ToType<T>(this object value, string valueName = "Value")
         {
-            if (contents != null)
+            try
             {
-                using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    {
-                        sw.Write(contents);
-                        fs.SetLength(contents.Length);
-                    }
-                }
+                return (T)Convert.ChangeType(value?.ToString(), typeof(T));
+            }
+            catch (Exception)
+            {
+                throw new Exception($"{valueName} ({typeof(T)}) was not in a correct format");
             }
         }
     }

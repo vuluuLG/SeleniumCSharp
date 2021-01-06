@@ -1,144 +1,18 @@
-﻿using System;
+﻿using Framework.Test.Common.DataObject;
+using Framework.Test.Common.Helper;
+using Framework.Tests.API.DataObject;
+using Framework.Tests.API.Helper;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using static Framework.Test.Common.Helper.ExtentReportsHelper;
 
 namespace Framework.Tests.API.Service
 {
-    public class ResponseData
-    {
-        public string FormAlias { get; set; }
-        public string QuoteId { get; set; }
-    }
-
-    public class ResponseData_GeneratedValue
-    {
-        public string FormAlias { get; set; }
-        public string VehicleId { get; set; }
-        public string DriverId { get; set; }
-    }
-
-    public class ResponseData_AddAnotherVehicle : ResponseData
-    {
-    }
-
-    public class ResponseData_AddAnotherDriver : ResponseData
-    {
-    }
-
-    public class ResponseData_Coverages : ResponseData
-    {
-    }
-
-    public class ResponseData_Vin : ResponseData
-    {
-        public string VehicleId { get; set; }
-    }
-
-    public class ResponseData_Enter : ResponseData
-    {
-        public string DriverId { get; set; }
-    }
-
-    public class ResponseData_BodyType : ResponseData_Vin
-    {
-    }
-
-    public class ResponseData_GrossWeight : ResponseData_Vin
-    {
-    }
-
-    public class ResponseData_SeatingCapacity : ResponseData_Vin
-    {
-    }
-
-    public class ResponseData_PhysicalDamage : ResponseData_Vin
-    {
-    }
-
-    public class ResponseData_Descriptors : ResponseData_Vin
-    {
-    }
-
-    public class ResponseData_Convictions : ResponseData_Enter
-    {
-    }
-
-    public class ResponseData_AccidentsAndViolations : ResponseData_Enter
-    {
-    }
-
-    public class ResponseData_CdlExperience : ResponseData_Enter
-    {
-    }
-
-    public class ResponseData_Classification : ResponseData_Vin
-    {
-        public string FlowQuestionId { get; set; }
-    }
-
-    public class ResponseData_Factor : ResponseData_Vin
-    {
-        public string FlowQuestionId { get; set; }
-    }
-
-    public class ResponseData_HcnoLiabilityQuestions1 : ResponseData
-    {
-    }
-
-    public class ResponseData_HcnoLiabilityQuestions2 : ResponseData
-    {
-    }
-
-    public class ResponseData_HcnoLiabilityQuestions3 : ResponseData
-    {
-    }
-
-    public class ResponseData_HiredCarPhsyicalDamage : ResponseData
-    {
-    }
-
-    public class ResponseData_CargoCategory : ResponseData
-    {
-    }
-
-    public class ResponseData_CargoCommodity : ResponseData
-    {
-    }
-
-    public class ResponseData_AdditionalInterestCounts : ResponseData
-    {
-    }
-
-    public class ResponseData_Summary : ResponseData
-    {
-    }
-
-    public class ResponseData_CargoLimitDeductible : ResponseData
-    {
-    }
-
-    public class ResponseData_PrimaryOfficer : ResponseData
-    {
-    }
-
-    public class ResponseData_BusinessInformation : ResponseData
-    {
-    }
-
-    public class ResponseData_TrailerInterchange : ResponseData
-    {
-    }
-
-    public class ResponseData_BusinessEntityType : ResponseData
-    {
-    }
-
-    public class ResponseData_DotNumber : ResponseData
-    {
-    }
-
     public class BreezeApi : ApiBase
     {
         #region Properties
@@ -230,7 +104,7 @@ namespace Framework.Tests.API.Service
             catch (Exception) { }
         }
 
-        public string ConvertDynamicIdData(object data)
+        public string ConvertDynamicData(object data)
         {
             ParameterValidator.ValidateNotNull(data, "Data will be converted");
 
@@ -244,8 +118,8 @@ namespace Framework.Tests.API.Service
                 if (DriverId != null)
                     convertedData = convertedData.Replace("@{driverId}", DriverId);
             }
-
-            return Common.Helper.Utils.ConvertDynamicData(convertedData);
+            
+            return Framework.Test.Common.Helper.Utils.ConvertDynamicData(convertedData);
         }
 
         [ExtentStepNode]
@@ -328,6 +202,7 @@ namespace Framework.Tests.API.Service
             var node = GetLastNode();
 
             if (value is null) return null;
+
             object returnObject;
             try
             {

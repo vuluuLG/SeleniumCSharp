@@ -1,0 +1,105 @@
+﻿{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"environments": {
+			"type": "object",
+			"patternProperties": {
+				"...": {
+					"type": "object",
+					"properties": {
+						"baseUrls": {
+							"type": "object",
+							"patternProperties": {
+								"...": {
+									"type": "object",
+									"properties": {
+										"host": {
+											"type": "string",
+											"format": "uri",
+											"pattern": "^(https?|http)://"
+										},
+										"path": {
+											"type": "string",
+											"format": "uri"
+										}
+									},
+									"additionalProperties": false,
+									"required": [
+										"host",
+										"path"
+									]
+								}
+							},
+							"additionalProperties": false,
+							"required": [
+								"web",
+								"breeze",
+								"nico",
+								"nicoShared"
+							]
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"baseUrls"
+					]
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"iso",
+				"dev",
+				"tst",
+				"local"
+			]
+		},
+		"services": {
+			"type": "object",
+			"patternProperties": {
+				"...": {
+					"type": "object",
+					"properties": {
+						"baseType": {
+							"type": "string",
+							"enum": [
+								"breeze",
+								"nico",
+								"web",
+								"nicoShared"
+							]
+						},
+						"path": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"baseType",
+						"path"
+					]
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"CommandProcessorApi",
+				"BreezeApi",
+				"VinApi",
+				"VinApiV2",
+				"NoteApi",
+				"SubmissionNumberApi",
+				"PriorAffiliationsApi",
+				"ZipTerritoryApi",
+				"AgenciesApi"
+			]
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"environments",
+		"services"
+	]
+}

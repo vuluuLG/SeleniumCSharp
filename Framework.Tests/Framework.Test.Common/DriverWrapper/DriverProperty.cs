@@ -14,6 +14,12 @@ namespace Framework.Test.Common.DriverWrapper
         // Remote settings
         public string RemoteUrl { get; set; }
         public Dictionary<string, object> Capabilities { get; set; }
+        // Mobile emuation
+        public string DeviceName { get; set; }
+        public string CustomUserAgent { get; set; }
+        public long CustomWidth { get; set; }
+        public long CustomHeight { get; set; }
+        public double CustomPixelRatio { get; set; }
 
         public string[] GetArgumentsAsArray()
         {

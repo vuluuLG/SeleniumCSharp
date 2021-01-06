@@ -1,0 +1,27 @@
+﻿{
+	"testCases": [
+		{
+			"testCaseNumber": 1,
+			"testCaseDescription": "Zip = 00001, Response status = 204",
+			"parameters": {
+				"zipCode": "00001",
+				"companyNumber": "02",
+				"effectiveDate": "@{next0day}"
+			},
+			"expectedStatusCode": "204",
+			"expectedResult": ""
+		},
+
+		{
+			"testCaseNumber": 2,
+			"testCaseDescription": "Zip = 6810, Response status = 400",
+			"parameters": {
+				"zipCode": "6810",
+				"companyNumber": "02",
+				"effectiveDate": "@{next0day}"
+			},
+			"expectedStatusCode": "400",
+			"expectedResult": "\"Zipcode is invalid\""
+		}
+	]
+}

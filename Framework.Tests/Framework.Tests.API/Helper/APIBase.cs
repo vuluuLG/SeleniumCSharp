@@ -1,14 +1,15 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Flurl;
+using Framework.Test.Common.DataObject;
+using Framework.Test.Common.Helper;
+using Framework.Test.UI.Helper;
 using Framework.Tests.API.DataObject;
+using RestSharp;
+using System;
+using System.Linq;
 
 namespace Framework.Tests.API.Helper
 {
-    public class APIBase
+    public class ApiBase
     {
         public string AccessToken { get; set; }
         public string SubscriptionKey { get; set; }
@@ -17,8 +18,9 @@ namespace Framework.Tests.API.Helper
         public string Host { get; set; }
         public string BaseUrl { get; set; }
         public string ResourceAddress { get; set; }
+        public UserAccount UserAccount { get; set; }
 
-        public APIBase(string apiKey, EnvironmentSetting setting)
+        public ApiBase(string apiKey, EnvironmentSetting setting)
         {
             if (string.IsNullOrEmpty(apiKey))
             {
@@ -39,7 +41,9 @@ namespace Framework.Tests.API.Helper
 
             BaseUrl = Host;
 
-            AccessToken = AccessTokenHelper.GetAccesstoken(setting.BrowserName, setting.WebUrl, setting.Username, setting.Password);
+            UserAccount = setting.UserAccounts.Where(x => x.Agent.Equals("breeze", StringComparison.CurrentCultureIgnoreCase)).First();
+
+            AccessToken = AccessTokenHelper.GetAccessToken(setting.BrowserName, setting.WebUrl, UserAccount.Email, UserAccount.Password);
         }
 
         protected IRestResponse SendHttpCall(RequestParameter requestParameter)

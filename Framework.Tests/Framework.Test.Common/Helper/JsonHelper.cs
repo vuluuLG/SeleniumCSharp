@@ -44,7 +44,7 @@ namespace Framework.Test.Common.Helper
         public string GetPropertyContentFromFile(string filePath, string propertyName)
         {
             string propertyContent = string.Empty;
-            string fileContent = Utils.ReadAllTextFromFile(filePath);
+            string fileContent = FileHelper.ReadAllTextFromFile(filePath);
             var jObject = JsonConvert.DeserializeObject<JObject>(fileContent, jsonSerializerSettings);
 
             if (jObject != null && jObject.SelectToken($"$..['{propertyName}']") != null)

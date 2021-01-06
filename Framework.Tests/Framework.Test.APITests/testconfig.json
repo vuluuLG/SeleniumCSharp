@@ -1,0 +1,123 @@
+﻿{
+	"$schema": "testconfig.schema.json",
+	"environments": {
+		"local": {
+			"baseUrls": {
+				"web" : {
+					"host": "http://localhost:4200",
+					"path": ""
+				},
+				"breeze" : {
+					"host": "http://localhost:7088",
+					"path": ""
+				},
+				"nico" : {
+					"host": "http://localhost:7088",
+					"path": ""
+				},
+			}
+		},
+		"iso": {
+			"baseUrls": {
+				"web" : {
+					"host": "https://wapp-brz-cus-iso.asurewebsites.net/",
+					"path": ""
+				},
+				"breeze" : {
+					"host": "https://isobreeze.bhhc.com/",
+					"path": "breeze/"
+				},
+				"nico" : {
+					"host": "https://isoapi.nationalindemnity.com/",
+					"path": "IntegrationServices/"
+				},
+			}
+		},
+		"tst": {
+			"baseUrls": {
+				"web" : {
+					"host": "https://testbreeze.bhhc.com/",
+					"path": ""
+				},
+				"breeze" : {
+					"host": "https://testbreeze.bhhc.com/",
+					"path": "breeze/"
+				},
+				"nico" : {
+					"host": "https://tstapi.nationalindemnity.com/",
+					"path": "IntegrationServices/"
+				},
+			}
+		},
+		"dev": {
+			"baseUrls": {
+				"web" : {
+					"host": "https://devbreeze.bhhc.com/",
+					"path": ""
+				},
+				"breeze" : {
+					"host": "https://devbreeze.bhhc.com/",
+					"path": "breeze/"
+				},
+				"nico" : {
+					"host": "https://devapi.nationalindemnity.com/",
+					"path": "IntegrationServices/"
+				},
+			}
+		},
+		"prd": {
+			"baseUrls": {
+				"web" : {
+					"host": "",
+					"path": ""
+				},
+				"breeze" : {
+					"host": "",
+					"path": "breeze/"
+				},
+				"nico" : {
+					"host": "",
+					"path": "IntegrationServices/"
+				},
+			}
+		}
+	},
+	"services": {
+		"CommandProcessorApi": {
+			"baseType": "breeze",
+			"path": "/brz-api-quote/command-processor-quote"
+		},
+		"BreezeApi": {
+			"baseType": "breeze",
+			"path": "/brz-api/"
+		},
+		"VinApi": {
+			"baseType": "nico",
+			"path": "/nico-int-vin/"
+		},
+		"VinApiV2": {
+			"baseType": "nico",
+			"path": "/nico-int-vin/"
+		},
+		"NoteApi": {
+			"baseType": "nico",
+			"path": "/nico-int-notes/"
+		},
+		"SubmissionNumberApi": {
+			"baseType": "nico",
+			"path": "/nico-int-subnr/"
+		},
+		"ProorAffiliationsApi": {
+			"baseType": "nico",
+			"path": "/nico-int-praffil/"
+		},
+		"ZipTerritoryApi": {
+			"baseType": "nico",
+			"path": "/nico-int-zipterr/"
+		},
+		"AgenciesApi": {
+			"baseType": "nico",
+			"path": "/nico-int-agencies/"
+		}
+	}
+}

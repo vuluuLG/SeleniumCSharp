@@ -60,8 +60,31 @@ namespace Framework.Test.Common.DriverWrapper.Browser
             // https://chromium.cypress.io/win64/stable/81.0.4044.92
             // options.BinaryLocation = "C:\\Users\\sbaltuonis\\Downloads\\chrome-win\\chrome.exe";
 
-            // run in private mode
+            // Run in private mode
             options.AddArgument("--incognito");
+
+            // Enable mobile emulation
+            if (!string.IsNullOrEmpty(driverProperty.DeviceName))
+            {
+                options.EnableMobileEmulation(driverProperty.DeviceName);
+            }
+            else if (!string.IsNullOrEmpty(driverProperty.CustomUserAgent))
+            {
+                if (driverProperty.CustomWidth <= 0
+                    || driverProperty.CustomHeight <= 0
+                    || driverProperty.CustomPixelRatio <= 0)
+                    throw new Exception("Custom device width, height and pixel ratio must be greater than 0");
+
+                ChromeMobileEmulationDeviceSettings emulationSettings = new ChromeMobileEmulationDeviceSettings
+                {
+                    UserAgent = driverProperty.CustomUserAgent,
+                    Width = driverProperty.CustomWidth,
+                    Height = driverProperty.CustomHeight,
+                    PixelRatio = driverProperty.CustomPixelRatio
+                };
+
+                options.EnableMobileEmulation(emulationSettings);
+            }
 
             // Setup driver binary
             try

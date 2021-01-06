@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Framework.Test.Common.DataObject;
+using Framework.Test.Common.Helper;
+using Framework.Tests.API.DataObject;
+using Framework.Tests.API.Helper;
+using RestSharp;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static Framework.Test.Common.Helper.ExtentReportsHelper;
 
 namespace Framework.Tests.API.Service
 {
@@ -15,7 +17,6 @@ namespace Framework.Tests.API.Service
         #region Actions
         public ZipTerritoryApi(EnvironmentSetting setting) : base(ApiKey, setting)
         {
-
         }
 
         [ExtentStepNode]

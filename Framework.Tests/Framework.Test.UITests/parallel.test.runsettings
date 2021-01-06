@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Configurations that affect the Test Framework -->
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+    <!-- Path relative to solution directory -->
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+    <!-- [x86] | x64  
+      - You can also change it from menu Test, Test Settings, Default Processor Architecture -->
+    <TargetPlatform>x86</TargetPlatform>
+    <!-- Framework35 | [Framework40] | Framework45 -->
+    <TargetFrameworkVersion>Framework45</TargetFrameworkVersion>
+    <!-- Path to Test Adapters -->
+    <!--<TestAdaptersPaths>%SystemDrive%\TestAdapter</TestAdaptersPaths>-->
+  </RunConfiguration>
+  <!-- Configurations for data collectors -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+
+      <DataCollector uri="datacollector://microsoft/VideoRecorder/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.DataCollection.VideoRecorder.VideoRecorderDataCollector, Microsoft.VisualStudio.TestTools.DataCollection.VideoRecorder, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Screen and Voice Recorder">
+        <!--Video data collector is only available with Visual Studio 2017 version 15.5 and higher -->
+      </DataCollector>
+
+    </DataCollectors>
+  </DataCollectionRunSettings>
+  <!-- Parameters used by tests at runtime -->
+  <TestRunParameters>
+    <!-- <Parameter name="browser" value="chrome" /> -->
+    <Parameter name="browser" value="chrome" />
+    <Parameter name="driverVersion" value="" />
+    <Parameter name="headless" value="false" />
+    <Parameter name="environment" value="iso" />
+    <Parameter name="environmentSettingsPath" value="C:\temp\environment_settings.xml" />
+    <!--<Parameter name="arguments" value="" />-->
+    <Parameter name="downloadLocation" value="C:\temp\" />
+    <Parameter name="resultLocation" value="C:\temp\TestResults\" />
+
+    <!-- Enable mobile emulation (Chrome only): use defined device -->
+    <!--<Parameter name="deviceName" value="Nexus 5" />-->
+
+    <!-- Enable mobile emulation (Chrome only): use custom device -->
+    <!--<Parameter name="customUserAgent" value="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36" />-->
+    <!--<Parameter name="customWidth" value="360" />-->
+    <!--<Parameter name="customHeight" value="640" />-->
+    <!--<Parameter name="customPixelRatio" value="1.0" />-->
+  </TestRunParameters>
+  <!-- Adapter Specific sections -->
+  <!-- MSTest adapter -->
+  <MSTest>
+    <Parallelize>
+      <Workers>10</Workers>
+      <Scope>MethodLevel</Scope>
+    </Parallelize>
+  </MSTest>
+  <!--<MSTest>
+    <MapInconclusiveToFailed>True</MapInconclusiveToFailed>
+    <CaptureTraceOutput>false</CaptureTraceOutput>
+    <DeleteDeploymClass1.csentDirectoryAfterTestRunIsComplete>False</DeleteDeploymentDirectoryAfterTestRunIsComplete>
+    <DeploymentEnabled>False</DeploymentEnabled>
+    <AssemblyResolution>
+      <Directory Path="">"D:\myfolder\bin\" includeSubDirectories="false"/>
+    </AssemblyResolution>
+  </MSTest>-->
+</RunSettings>

@@ -5,45 +5,45 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 // XML format
-// <?xml version="1.0" encoding = "utf-8"?>
-// <Enviroment>
-// <iso>
-// <Username></Username>
-// <Password></Password>
-// <DatabaseConnectionString></DatabaseConnectionString>
-// <BreezeSubcriptiontKey></BreezeSubcriptiontKey>
-// <NicoSubcriptiontKey></NicoSubcriptiontKey>
-// </iso>
-// </Enviroment>
+//  <?xml version="1.0" encoding="utf-8"?>
+//  <Environments>
+//      <iso>
+//          <Accounts>
+//              <Account>
+//                  <Email></Email>
+//                  <Password></Password>
+//                  <Username></Username>
+//                  <Agent></Agent>
+//              </Account>
+//          </Accounts>
+//          <DatabaseConnectionString></DatabaseConnectionString>
+//          <BreezeSubscriptionKey></BreezeSubscriptionKey>
+//          <NicoSubscriptionKey></NicoSubscriptionKey>
+//      </iso>
+//  </Environments>
 
 namespace Framework.Test.Common.Helper
 {
-    public static class EnviromentHelper
+    public static class EnvironmentHelper
     {
-        [ThreadStatic]
-        private static EnvironmentSetting envirnomentSetting;
+        public static EnvironmentSetting EnvironmentSetting { get; set; }
 
-        public static EnvironmentSetting EnvironmentSetting
+        public static void LoadEnvironmentSetting(string path, string environment)
         {
-            get { return envirnomentSetting; }
-        }
-
-        public static EnvironmentSetting LoadEnvironmentSetting(string path, string environment)
-        {
-            var content = Utils.ReadAllTextFromFile(path);
+            var content = FileHelper.ReadAllTextFromFile(path);
             XmlDocument data = new XmlDocument();
             data.LoadXml(content);
             var root = data.SelectSingleNode("/Environments/" + environment);
             if (root == null) throw new Exception($"There is no setting for enviroment '{environment}' in xml");
+
+            var userAccounts = root.GetUserAccounts();
             var nicoSubscriptionKey = root.SelectSingleNode("NicoSubscriptionKey")?.InnerText;
             var breezeSubscriptionKey = root.SelectSingleNode("BreezeSubscriptionKey")?.InnerText;
 
-            var configJson = Utils.ReadAllTextFromFile("testconfig.json");
+            var configJson = FileHelper.ReadAllTextFromFile("testconfig.json");
             var testConfig = JObject.Parse(configJson);
             var webUrl = testConfig.GetBaseUrls(environment, "web").full;
 
@@ -73,21 +73,20 @@ namespace Framework.Test.Common.Helper
                         return new ServiceSetting()
                         {
                             Host = host,
-                            ResoureAddress = resourceAddress,
-                            SubcriptionKey = subscriptionKey
+                            ResourceAddress = resourceAddress,
+                            SubscriptionKey = subscriptionKey
                         };
                     }
                 );
-            envirnomentSetting = new EnvironmentSetting()
+
+            EnvironmentSetting = new EnvironmentSetting()
             {
                 EnvironmentName = environment,
                 WebUrl = webUrl,
-                UserName = root.SelectSingleNode("Username")?.InnerText,
-                Password = root.SelectSingleNode("Password")?.InnerText,
+                UserAccounts = userAccounts,
                 DatabaseConnectionString = root.SelectSingleNode("DatabaseConnectionString")?.InnerText,
                 Services = servicesConfig
             };
-            return envirnomentSetting;
         }
 
         private static (string host, string path, string full) GetBaseUrls(this JObject config,
@@ -110,6 +109,26 @@ namespace Framework.Test.Common.Helper
             var completePath = Url.Combine(basePath, servicePath);
 
             return (host, completePath);
+        }
+
+        private static UserAccount[] GetUserAccounts(this XmlNode node)
+        {
+            List<UserAccount> accounts = new List<UserAccount>();
+
+            foreach (var item in node.SelectNodes("Accounts/Account").Cast<XmlNode>().ToArray())
+            {
+                accounts.Add(
+                    new UserAccount
+                    {
+                        Email = item.SelectSingleNode("Email")?.InnerText,
+                        Password = item.SelectSingleNode("Password")?.InnerText,
+                        Username = item.SelectSingleNode("Username")?.InnerText,
+                        Agent = item.SelectSingleNode("Agent")?.InnerText
+                    }
+                );
+            }
+
+            return accounts.ToArray();
         }
 
         public static IMarkup MarkupJsonString(this EnvironmentSetting setting)

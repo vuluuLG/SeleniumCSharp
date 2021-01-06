@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AventStack.ExtentReports;
+using Framework.Test.Common.Helper;
+using RestSharp;
 
 namespace Framework.Tests.API.Helper
 {
-    public class Utils
+    static class Utils
     {
         public static void LogRequestBodyInfo(this ExtentTest node, object body)
         {

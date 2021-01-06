@@ -24,8 +24,7 @@ namespace Framework.Test.Common.DriverWrapper
 
         public static IWebDriver Driver
         {
-            get
-            {
+            get {
                 try
                 {
                     return driverList[currentKey];
@@ -210,28 +209,34 @@ namespace Framework.Test.Common.DriverWrapper
 
         public static void Quit()
         {
-            Driver.Quit();
-            driverList.Remove(currentKey);
-            propertyList.Remove(currentKey);
-            if (driverList.Count > 0)
+            if (driverList != null)
             {
-                if (!driverList.ContainsKey(defaultKey))
+                Driver.Quit();
+                driverList.Remove(currentKey);
+                propertyList.Remove(currentKey);
+                if (driverList.Count > 0)
                 {
-                    defaultKey = driverList.First().Key;
-                }
+                    if (!driverList.ContainsKey(defaultKey))
+                    {
+                        defaultKey = driverList.First().Key;
+                    }
 
-                currentKey = driverList.Last().Key;
+                    currentKey = driverList.Last().Key;
+                }
             }
         }
 
         public static void QuitAllDriver()
         {
-            foreach (var driver in driverList.Values)
+            if (driverList != null)
             {
-                driver.Quit();
+                foreach (var driver in driverList.Values)
+                {
+                    driver.Quit();
+                }
+                driverList.Clear();
+                propertyList.Clear();
             }
-            driverList.Clear();
-            propertyList.Clear();
         }
 
         public static IWebElement FindElement(By locator)

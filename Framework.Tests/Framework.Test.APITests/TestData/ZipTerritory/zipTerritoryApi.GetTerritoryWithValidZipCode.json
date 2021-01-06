@@ -1,0 +1,20 @@
+﻿{
+	"testCases": [
+		{
+			"testCaseNumber": 1,
+			"testCaseDescription": "Zip = 60017, Response status = 200",
+			"parameters": {
+				"zipCode": "60017",
+				"companyNumber": "02",
+				"effectiveDate": "@{next0day}"
+			},
+			"expectedStatusCode": "200",
+			"expectedResult": [
+				{
+					"value": 39,
+					"zipCode": "60017"
+				}
+			]
+		}
+	]
+}

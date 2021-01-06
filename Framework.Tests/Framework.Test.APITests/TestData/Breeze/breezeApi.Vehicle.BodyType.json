@@ -1,0 +1,71 @@
+﻿{
+	"testCases": [
+		{
+			"testCaseNumber": 1,
+			"testCaseDescription": "Tractor - go to Classification",
+			"testCaseSteps": [
+				{
+					"parameters": {
+						"screenName": "effective-date"
+					},
+					"body": {
+						"value": "@{next1day:timeline<12-01:MM-dd>}T05:00:00:000Z",
+						"quoteId": "@{quoteId}",
+						"ianaTimeZone": "America/New_York"
+					},
+					"expectedStatusCode": "200",
+					"expectedResult": {
+						"formAlias": "dot-number",
+						"quoteId": "@{quoteId}"
+					}
+				},
+				{
+					"parameters": {
+						"screenName": "body-type"
+					},
+					"body": {
+						"quoteId": "@{quoteId}",
+						"vehicleId": "@{vehicleId}",
+						"bodyType": {
+							"value": "Tractor",
+							"type": "Gross Vehicle Weight"
+						}
+					},
+					"expectedStatusCode": "200",
+					"expectedResult": {
+						"formAlias": "classification",
+						"quoteId": "@{quoteId}",
+						"vehicleId": "@{vehicleId}",
+						"flowQuestionId": "9889"
+					}
+				}
+			]
+		},
+
+		{
+			"testCaseNumber": 2,
+			"testCaseDescription": "Truck - go to GVW",
+			"testCaseSteps": [
+				{
+					"parameters": {
+						"screenName": "body-type"
+					},
+					"body": {
+						"quoteId": "@{quoteId}",
+						"vehicleId": "@{vehicleId}",
+						"bodyType": {
+							"value": "Pickup",
+							"type": "Gross Vehicle Weight"
+						}
+					},
+					"expectedStatusCode": "200",
+					"expectedResult": {
+						"formAlias": "classification",
+						"quoteId": "@{quoteId}",
+						"vehicleId": "@{vehicleId}"
+					}
+				}
+			]
+		}
+	]
+}

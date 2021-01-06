@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Framework.Test.Common.Helper;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json.Linq;
+using System;
+using static Framework.Test.Common.Helper.ExtentReportsHelper;
 
 namespace Framework.Tests.API.Helper
 {
@@ -31,7 +32,7 @@ namespace Framework.Tests.API.Helper
                 node.Info("Partition Key: " + PartitionKey);
             }
 
-            string fltrPartition = TableQuery.GenerateFilterCondition("Partiti.Equal,onKey", QueryComparisons PartitionKey);
+            string fltrPartition = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, PartitionKey);
             if (!string.IsNullOrEmpty(eventType))
             {
                 node.Info("Event type: " + eventType);
